@@ -29,6 +29,11 @@ class BootstrapCommand extends MelosCommand {
       help: 'Run pub get with --offline to resolve dependencies from local '
           'cache.',
     );
+    argParser.addFlag(
+      'no-dev-deps',
+      negatable: false,
+      help: 'Ignore dev_dependencies during shared package resolution',
+    );
   }
 
   @override
@@ -52,6 +57,7 @@ class BootstrapCommand extends MelosCommand {
       noExample: argResults?['no-example'] as bool,
       skipLinking: argResults?['skip-linking'] as bool,
       offline: argResults?['offline'] as bool,
+      noDevDeps: argResults?['no-dev-deps'] as bool,
     );
   }
 }

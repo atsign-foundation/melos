@@ -8,6 +8,7 @@ mixin _BootstrapMixin on _CleanMixin {
     bool? enforceLockfile,
     bool skipLinking = false,
     bool offline = false,
+    bool noDevDeps = false,
   }) async {
     final workspace =
         await createWorkspace(global: global, packageFilters: packageFilters);
@@ -51,7 +52,7 @@ mixin _BootstrapMixin on _CleanMixin {
         try {
           if (bootstrapCommandConfig.environment != null ||
               bootstrapCommandConfig.dependencies != null ||
-              bootstrapCommandConfig.devDependencies != null) {
+              (!noDevDeps && bootstrapCommandConfig.devDependencies != null)) {
             logger.log('Updating common dependencies in workspace packages...');
 
             final filteredPackages = workspace.filteredPackages.values;
@@ -60,7 +61,8 @@ mixin _BootstrapMixin on _CleanMixin {
                 package,
                 environment: bootstrapCommandConfig.environment,
                 dependencies: bootstrapCommandConfig.dependencies,
-                devDependencies: bootstrapCommandConfig.devDependencies,
+                devDependencies:
+                    noDevDeps ? null : bootstrapCommandConfig.devDependencies,
               );
             }).drain<void>();
 
